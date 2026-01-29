@@ -10,14 +10,10 @@ const routes: Routes = [
     path: '',
     component: LayoutPageComponent,
     children: [
-
-      // 👇 entrada al dashboard → redirección dinámica por permisos
       {
         path: '',
         component: HomeRedirectComponent,
       },
-
-      // ===== ADMINISTRACIÓN =====
       {
         path: 'users',
         canActivate: [PermissionGuard],
@@ -39,8 +35,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('../modules/policys/policys.module').then(m => m.PolicysModule),
       },
-
-      // ===== CLIENTE =====
       {
         path: 'my-policies',
         canActivate: [PermissionGuard],
@@ -55,8 +49,6 @@ const routes: Routes = [
         loadChildren: () =>
           import('../modules/profile/profile.module').then(m => m.ProfileModule),
       },
-
-      // fallback
       { path: '**', component: HomeRedirectComponent },
     ],
   },

@@ -1,0 +1,121 @@
+<shared-loading-page *ngIf="isLoading"></shared-loading-page>
+
+<div class="flex justify-between items-center mb-8 mt-4">
+    <button mat-stroked-button class="btn-info w-36" (click)="goBack()">
+        ← Regresar
+    </button>
+</div>
+
+<h2 class="text-2xl text-center md:w-full mb-5 -mt-4">
+    {{ isEditMode ? 'Actualizar Cliente' : 'Alta de Cliente' }}
+</h2>
+
+<form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-3 gap-2">
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="firstName" required />
+        <mat-error *ngIf="isValidField('firstName')">El nombre es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Apellido paterno</mat-label>
+        <input matInput formControlName="lastName" required />
+        <mat-error *ngIf="isValidField('lastName')">El apellido paterno es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Apellido materno</mat-label>
+        <input matInput formControlName="mLastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required [readonly]="isEditMode" />
+        <mat-error *ngIf="isValidField('email')">Email es requerido y debe ser válido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" />
+
+        <mat-error *ngIf="!isEditMode && isValidField('password')">
+            La contraseña es requerida (mínimo 6).
+        </mat-error>
+
+        <mat-hint *ngIf="isEditMode" class="text-xs">
+            (Opcional) Solo llena este campo si deseas actualizar la contraseña.
+        </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="phone" maxlength="10" />
+        <mat-error *ngIf="isValidField('phone')">El teléfono debe tener 10 dígitos.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Código Postal</mat-label>
+        <input matInput formControlName="cve_CodigoPostal" maxlength="5" (input)="onZipCodeInput()" />
+        <mat-error *ngIf="isValidField('cve_CodigoPostal')">El CP es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Estado</mat-label>
+        <input type="text" matInput [formControl]="stateControl" [matAutocomplete]="autoState" required />
+        <mat-autocomplete #autoState="matAutocomplete" [displayWith]="displayFn"
+            (optionSelected)="onStateSelected($event.option.value)">
+            <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                {{ state.d_estado }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="isValidField('cve_Estado')">El Estado es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Municipio</mat-label>
+        <input type="text" matInput [formControl]="municipalityControl" [matAutocomplete]="autoMunicipality" required />
+        <mat-autocomplete #autoMunicipality="matAutocomplete" [displayWith]="displayFnMun"
+            (optionSelected)="onMunicipalitySelected($event.option.value)">
+            <mat-option *ngFor="let m of filteredMunicipality | async" [value]="m">
+                {{ m.d_mnpio }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="isValidField('cve_Municipio')">El Municipio es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Colonia</mat-label>
+        <input type="text" matInput [formControl]="coloniaControl" [matAutocomplete]="autoColonia" required />
+        <mat-autocomplete #autoColonia="matAutocomplete" [displayWith]="displayFnCol"
+            (optionSelected)="onColoniaSelected($event.option.value)">
+            <mat-option *ngFor="let c of filteredColonia | async" [value]="c">
+                {{ c.d_asenta }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="isValidField('cve_Colonia')">La colonia es requerida.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Calle</mat-label>
+        <input matInput formControlName="street" required />
+        <mat-error *ngIf="isValidField('street')">La calle es requerida.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Número exterior</mat-label>
+        <input matInput formControlName="extNbr" required />
+        <mat-error *ngIf="isValidField('extNbr')">El número exterior es requerido.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="h-17 mat-input-sm">
+        <mat-label>Número interior</mat-label>
+        <input matInput formControlName="innerNbr" />
+    </mat-form-field>
+
+    <div class="md:col-span-3 flex justify-center mt-10">
+        <button mat-raised-button class="btn-success" type="submit">
+            {{ isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente' }}
+        </button>
+    </div>
+</form>
