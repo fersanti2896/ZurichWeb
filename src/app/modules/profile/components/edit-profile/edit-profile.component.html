@@ -1,0 +1,78 @@
+<shared-loading-page *ngIf="isLoading"></shared-loading-page>
+
+<h2 mat-dialog-title class="text-lg font-semibold">
+  Editar Teléfono y Domicilio
+</h2>
+
+<div mat-dialog-content class="mt-2">
+  <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+    <!-- Teléfono -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="phone" maxlength="10" />
+      <mat-error *ngIf="invalid('phone')">Teléfono requerido (10 dígitos).</mat-error>
+    </mat-form-field>
+
+    <!-- CP -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Código Postal</mat-label>
+      <input matInput formControlName="cve_CodigoPostal" maxlength="5" (input)="onZipCodeInput()" />
+      <mat-error *ngIf="invalid('cve_CodigoPostal')">CP requerido (5 dígitos).</mat-error>
+    </mat-form-field>
+
+    <!-- Estado (display) -->
+    <div class="p-3 rounded-lg bg-gray-50">
+      <label class="text-sm text-gray-500">Estado</label>
+      <p class="font-semibold text-gray-900">{{ displayState || '—' }}</p>
+    </div>
+
+    <!-- Municipio (display) -->
+    <div class="p-3 rounded-lg bg-gray-50">
+      <label class="text-sm text-gray-500">Municipio</label>
+      <p class="font-semibold text-gray-900">{{ displayMunicipality || '—' }}</p>
+    </div>
+
+    <!-- Colonia (select) -->
+    <mat-form-field appearance="fill" class="w-full md:col-span-2">
+      <mat-label>Colonia</mat-label>
+      <mat-select formControlName="cve_Colonia">
+        <mat-option *ngFor="let col of colonies" [value]="col.id_asenta_cpcons">
+          {{ col.d_asenta }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="invalid('cve_Colonia')">Colonia requerida.</mat-error>
+    </mat-form-field>
+
+    <!-- Calle -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Calle</mat-label>
+      <input matInput formControlName="street" />
+      <mat-error *ngIf="invalid('street')">Calle requerida.</mat-error>
+    </mat-form-field>
+
+    <!-- Exterior -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Número exterior</mat-label>
+      <input matInput formControlName="extNbr" />
+      <mat-error *ngIf="invalid('extNbr')">Número exterior requerido.</mat-error>
+    </mat-form-field>
+
+    <!-- Interior -->
+    <mat-form-field appearance="fill" class="w-full md:col-span-2">
+      <mat-label>Número interior</mat-label>
+      <input matInput formControlName="innerNbr" />
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions align="end" class="mt-4">
+  <button mat-raised-button class="btn-cancel h-10" type="button" (click)="close()">
+    Cancelar
+  </button>
+
+  <button mat-raised-button class="btn-success h-10 ml-2" type="button" (click)="save()">
+    Guardar cambios
+  </button>
+</div>

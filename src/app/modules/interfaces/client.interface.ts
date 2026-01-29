@@ -23,37 +23,48 @@ export interface ClientDTO {
 }
 
 export interface CreateClientRequest {
-  firstName: string;
-  lastName: string;
-  mLastName?: string | null;
-  email: string;
-  password: string;
-  phone: string;
+    firstName: string;
+    lastName: string;
+    mLastName?: string | null;
+    email: string;
+    password: string;
+    phone: string;
 
-  cve_CodigoPostal: string;
-  cve_Estado: string;
-  cve_Municipio: string;
-  cve_Colonia: string;
+    cve_CodigoPostal: string;
+    cve_Estado: string;
+    cve_Municipio: string;
+    cve_Colonia: string;
 
-  street: string;
-  extNbr: string;
-  innerNbr?: string | null;
+    street: string;
+    extNbr: string;
+    innerNbr?: string | null;
 }
 
 export interface UpdateClientRequest {
-  clientId: number;
+    clientId: number;
 
-  firstName: string;
-  lastName: string;
-  mLastName?: string | null;
-  password?: string | null;
+    firstName: string;
+    lastName: string;
+    mLastName?: string | null;
+    password?: string | null;
 
-  phone: string;
-  cve_CodigoPostal: string;
-  cve_Estado: string;
-  cve_Municipio: string;
-  cve_Colonia: string;
-  street: string;
-  extNbr: string;
-  innerNbr?: string | null;
+    phone: string;
+    cve_CodigoPostal: string;
+    cve_Estado: string;
+    cve_Municipio: string;
+    cve_Colonia: string;
+    street: string;
+    extNbr: string;
+    innerNbr?: string | null;
+}
+
+export interface UpdateMyProfileRequest {
+    phone: string;
+    cve_CodigoPostal: string;
+    cve_Estado: string;
+    cve_Municipio: string;
+    cve_Colonia: string;
+    street: string;
+    extNbr: string;
+    innerNbr?: string | null;
 }
